@@ -21,11 +21,7 @@ class Stack(Generic[T]):
         raise NotIterableError
 
     def __repr__(self) -> str:
-        if self.is_empty:
-            return "Stack()"
-
-        stack_top = self.peek()
-        return f"Stack({stack_top})"
+        return f"Stack({self._stack} TOP)"
 
     @property
     def is_empty(self) -> bool:

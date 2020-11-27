@@ -16,6 +16,9 @@ class Queue(Generic[T]):
     def __len__(self) -> int:
         return len(self._queue)
 
+    def __repr__(self) -> str:
+        return f"Queue(IN {self._queue} OUT)"
+
     @property
     def is_full(self) -> bool:
         return len(self) == self._capacity
