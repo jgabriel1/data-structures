@@ -1,0 +1,6 @@
+class QueueOverflowError(BaseException):
+    ...
+
+
+class QueueUnderflowError(BaseException):
+    ...
