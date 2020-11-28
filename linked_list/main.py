@@ -149,7 +149,23 @@ class LinkedList(Generic[T]):
         """
         TODO: Remove the last item of the list returning it.
         """
-        ...
+        buffer = LinkedList()
+        head = self._head
+
+        if head is None:
+            raise IndexError("Cannot pop from empty list")
+
+        for item in self:
+            next_node = head.get_next()
+
+            if next_node is None:
+                self._set_head(buffer._head)
+                return item
+
+            buffer.add_to_end(item)
+            head = head.get_next()
+        else:
+            raise IndexError
 
     def remove(self, index: int) -> T:
         """
