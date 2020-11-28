@@ -82,6 +82,15 @@ class LinkedList(Generic[T]):
 
         return node
 
+    def _extend_node(self, node: Node) -> None:
+        self._head.set_next(node)
+
+    def _extend_list(self, _list: LinkedListType) -> None:
+        self._head.set_next(_list._node)
+
+    def _set_head(self, new_head: Optional[Node]) -> None:
+        self._head = new_head
+
     def contains(self, data: T) -> bool:
         for item in self:
             if item == data:
@@ -116,9 +125,28 @@ class LinkedList(Generic[T]):
 
     def insert(self, index: int, data: T) -> None:
         """
-        TODO: Insert an item in a specific position of the list.
+        Insert an item in a specific position of the list.
+        TODO: Refactor so that it can be inserted at the beginning or at the end. As is
+        it breaks if used with those indexes.
         """
-        ...
+
+        buffer = LinkedList()
+        current = self._head
+
+        for i, item in enumerate(self):
+            if i == index:
+                new_list = Node(data)
+                new_list.set_next(current)
+                break
+
+            buffer.add_to_end(item)
+            current = current.get_next()
+        else:
+            raise IndexError
+
+        buffer._extend_node(new_list)
+
+        self._set_head(buffer._head)
 
     def pop(self) -> T:
         """
