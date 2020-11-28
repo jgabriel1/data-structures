@@ -28,6 +28,13 @@ class TestLinkedList(TestCase):
 
         self.assertEquals(last_element, "third")
 
+    def test_add_item_to_end_of_empty_list(self):
+        linked_list = LinkedList()
+
+        linked_list.add_to_end("item")
+
+        self.assertIn("item", linked_list)
+
     def test_add_item_to_start(self):
         linked_list = LinkedList[int](1, 2, 3)
 
@@ -35,3 +42,26 @@ class TestLinkedList(TestCase):
         first_item = linked_list[0]
 
         self.assertEquals(first_item, 0)
+
+    def test_add_item_to_start_of_empty_list(self):
+        linked_list = LinkedList()
+
+        linked_list.add_to_start("item")
+
+        self.assertIn("item", linked_list)
+
+    def test_insert_item_at_specific_index(self):
+        linked_list = LinkedList[str]("apple", "banana", "cantaloupe")
+
+        linked_list.insert(1, "mango")
+
+        self.assertIn("mango", linked_list)
+        self.assertEquals(linked_list[1], "mango")
+
+    def test_pop_last_item_and_return_it(self):
+        linked_list = LinkedList[str]("apple", "banana", "cantaloupe")
+
+        cantaloupe = linked_list.pop()
+
+        self.assertEquals(cantaloupe, "cantaloupe")
+        self.assertNotIn("cantaloupe", linked_list)
