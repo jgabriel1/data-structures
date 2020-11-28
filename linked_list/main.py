@@ -30,8 +30,8 @@ class LinkedList(Generic[T]):
     _node: Optional[Node]
 
     def __init__(self, *items: T) -> None:
-        self._iterator = iter(items)
-        self._node = self._build_linked_list()
+        iterator = iter(items)
+        self._node = self._build_linked_list(iterator)
 
     def __repr__(self) -> str:
         return [item for item in self].__repr__()
@@ -68,14 +68,14 @@ class LinkedList(Generic[T]):
         else:
             raise IndexError
 
-    def _build_linked_list(self) -> Optional[Node]:
+    def _build_linked_list(self, iterator: Iterator[T]) -> Optional[Node]:
         try:
-            item = next(self._iterator)
+            item = next(iterator)
         except StopIteration:
             return None
 
         node = Node(item)
-        node.set_next(self._build_linked_list())
+        node.set_next(self._build_linked_list(iterator))
 
         return node
 
