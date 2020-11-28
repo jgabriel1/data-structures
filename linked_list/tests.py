@@ -65,3 +65,10 @@ class TestLinkedList(TestCase):
 
         self.assertEquals(cantaloupe, "cantaloupe")
         self.assertNotIn("cantaloupe", linked_list)
+
+    def test_not_able_to_pop_empty_list(self):
+        linked_list = LinkedList()
+
+        pop_from_empty_list = lambda: linked_list.pop()
+
+        self.assertRaises(IndexError, pop_from_empty_list)
