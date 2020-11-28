@@ -79,14 +79,17 @@ class LinkedList(Generic[T]):
 
         return node
 
+    def _set_head(self, new_head: Optional[Node]) -> None:
+        self._head = new_head
+
     def _extend_node(self, node: Node) -> None:
-        self._head.set_next(node)
+        if self._head is None:
+            self._set_head(node)
+        else:
+            self._head.set_next(node)
 
     def _extend_list(self, _list: LinkedListType) -> None:
         self._head.set_next(_list._node)
-
-    def _set_head(self, new_head: Optional[Node]) -> None:
-        self._head = new_head
 
     def contains(self, data: T) -> bool:
         for item in self:
@@ -147,13 +150,10 @@ class LinkedList(Generic[T]):
 
     def pop(self) -> T:
         """
-        TODO: Remove the last item of the list returning it.
+        Remove the last item of the list returning it.
         """
         buffer = LinkedList()
         head = self._head
-
-        if head is None:
-            raise IndexError("Cannot pop from empty list")
 
         for item in self:
             next_node = head.get_next()
@@ -169,6 +169,19 @@ class LinkedList(Generic[T]):
 
     def remove(self, index: int) -> T:
         """
-        TODO: Remove an item from the list at a specific index.
+        Remove an item from the list at a specific index.
         """
-        ...
+        buffer = LinkedList()
+        head = self._head
+
+        for i, item in enumerate(self):
+            if i == index:
+                buffer._extend_node(head.get_next())
+                self._set_head(buffer._head)
+
+                return item
+
+            buffer.add_to_end(item)
+            head = head.get_next()
+        else:
+            raise IndexError

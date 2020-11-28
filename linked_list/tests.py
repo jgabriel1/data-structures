@@ -72,3 +72,11 @@ class TestLinkedList(TestCase):
         pop_from_empty_list = lambda: linked_list.pop()
 
         self.assertRaises(IndexError, pop_from_empty_list)
+
+    def test_removes_item_in_specific_index(self):
+        linked_list = LinkedList[str]("apple", "banana", "cantaloupe")
+
+        banana = linked_list.remove(1)
+
+        self.assertEquals(banana, "banana")
+        self.assertNotIn("banana", linked_list)
