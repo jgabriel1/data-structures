@@ -43,14 +43,14 @@ class LinkedList(Generic[T]):
         head = self._node
 
         while True:
-            yield head.data
+            try:
+                # The last item of the list points to a None. Trying to access the property
+                # data of None should raise an AttributeError.
+                yield head.data
 
-            next_head = head.get_next()
-
-            if next_head is None:
+                head = head.get_next()
+            except AttributeError:
                 break
-            else:
-                head = next_head
 
     def __getitem__(self, position: int) -> T:
         """
