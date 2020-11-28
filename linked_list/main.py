@@ -3,6 +3,7 @@ from typing import Any, Generic, Iterator, NewType, Optional, TypeVar
 T = TypeVar("T")
 
 NodeType = NewType(name="NodeType", tp=Any)
+LinkedListType = NewType(name="LinkedListType", tp=Any)
 
 
 class Node(Generic[T]):
@@ -26,12 +27,11 @@ class Node(Generic[T]):
 
 class LinkedList(Generic[T]):
 
-    _iterator: Iterator[T]
-    _node: Optional[Node]
+    _head: Optional[Node]
 
     def __init__(self, *items: T) -> None:
         iterator = iter(items)
-        self._node = self._build_linked_list(iterator)
+        self._head = self._build_linked_list(iterator)
 
     def __repr__(self) -> str:
         return [item for item in self].__repr__()
@@ -40,7 +40,7 @@ class LinkedList(Generic[T]):
         return sum(1 for _ in self)
 
     def __iter__(self) -> Iterator[T]:
-        head = self._node
+        head = self._head
 
         while True:
             try:
@@ -57,10 +57,7 @@ class LinkedList(Generic[T]):
         O(K) where K is the index passed. The list has to be iterated to reach the index.
         TODO: Make this algorithm better for negative indexes. `len(self)` is expensive.
         """
-        if position < 0:
-            _position = len(self) + position
-        else:
-            _position = position
+        _position = len(self) + position if position < 0 else position
 
         for index, item in enumerate(self):
             if index == _position:
@@ -100,16 +97,16 @@ class LinkedList(Generic[T]):
 
     def add_to_start(self, data: T) -> None:
         new_head = Node(data)
-        new_head.set_next(self._node)
+        new_head.set_next(self._head)
 
-        self._node = new_head
+        self._head = new_head
 
     def add_to_end(self, data: T) -> None:
         """
         The time complexity has to be O(N), since the entire list needs to be iterated
         through to get to the last node.
         """
-        current_head = self._node
+        current_head = self._head
 
         # When the list is empty, adding to start has the same effect:
         if current_head is None:
@@ -121,7 +118,7 @@ class LinkedList(Generic[T]):
         new_head = Node(data)
         current_head.set_next(new_head)
 
-        self._node = current_head
+        self._head = current_head
 
     def insert(self, index: int, data: T) -> None:
         """
