@@ -68,6 +68,9 @@ class LinkedList(Generic[T]):
         else:
             raise IndexError
 
+    def __contains__(self, data: T) -> bool:
+        return self.contains(data)
+
     def _build_linked_list(self, iterator: Iterator[T]) -> Optional[Node]:
         try:
             item = next(iterator)
@@ -78,6 +81,13 @@ class LinkedList(Generic[T]):
         node.set_next(self._build_linked_list(iterator))
 
         return node
+
+    def contains(self, data: T) -> bool:
+        for item in self:
+            if item == data:
+                return True
+        else:
+            return False
 
     def add_to_end(self, data: T) -> None:
         """
