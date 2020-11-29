@@ -1,6 +1,22 @@
-from typing import Generic, Optional, TypeVar
+from abc import ABCMeta, abstractmethod
+from typing import Any, Generic, Optional, TypeVar
 
-T = TypeVar("T")
+
+class Comparable(metaclass=ABCMeta):
+    @abstractmethod
+    def __gt__(self, other: "Comparable") -> bool:
+        ...
+
+    @abstractmethod
+    def __lt__(self, other: "Comparable") -> bool:
+        ...
+
+    @abstractmethod
+    def __eq__(self, other: "Comparable") -> bool:
+        ...
+
+
+T = TypeVar("T", Comparable, Any)
 
 
 class Node(Generic[T]):
