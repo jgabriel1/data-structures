@@ -13,3 +13,4 @@ video and had the idea to try to implement some of the structures he talks about
 - **Stack**
 - **Queue**
 - **Linked List**
+- **Binary Tree**
