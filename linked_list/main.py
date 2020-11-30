@@ -2,14 +2,11 @@ from typing import Any, Generic, Iterator, NewType, Optional, TypeVar
 
 T = TypeVar("T")
 
-NodeType = NewType(name="NodeType", tp=Any)
-LinkedListType = NewType(name="LinkedListType", tp=Any)
-
 
 class Node(Generic[T]):
 
     data: T
-    _next: Optional[NodeType]
+    _next: Optional["Node"]
 
     def __init__(self, data: T) -> None:
         self.data = data
@@ -18,10 +15,10 @@ class Node(Generic[T]):
     def __repr__(self) -> str:
         return f"Node({self.data}, {self._next})"
 
-    def set_next(self, node: NodeType):
+    def set_next(self, node: "Node" = None):
         self._next = node
 
-    def get_next(self) -> NodeType:
+    def get_next(self) -> Optional["Node"]:
         return self._next
 
 
@@ -87,9 +84,6 @@ class LinkedList(Generic[T]):
             self._set_head(node)
         else:
             self._head.set_next(node)
-
-    def _extend_list(self, _list: LinkedListType) -> None:
-        self._head.set_next(_list._node)
 
     def contains(self, data: T) -> bool:
         for item in self:
