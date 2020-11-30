@@ -118,28 +118,30 @@ class LinkedList(Generic[T]):
 
     def insert(self, index: int, data: T) -> None:
         """
-        Insert an item in a specific position of the list.
-        TODO: Refactor so that it can be inserted at the beginning or at the end. As is
-        it breaks if used with those indexes.
+        Insert an item in a specific position of the list. Time complexity is O(index).
+        The algorithm has to iterate over the list all the way up to the point where the
+        new item will be added.
         """
 
-        buffer = LinkedList()
         current = self._head
 
-        for i, item in enumerate(self):
-            if i == index:
-                new_list = Node(data)
-                new_list.set_next(current)
+        if index == 0:
+            return self.add_to_start(data)
+
+        for i, _ in enumerate(self):
+            if i + 1 == index:
+                rest = current.get_next()
+
+                new_node = Node(data)
+                new_node.set_next(rest)
+
+                current.set_next(new_node)
+
                 break
 
-            buffer.add_to_end(item)
             current = current.get_next()
         else:
-            raise IndexError
-
-        buffer._extend_node(new_list)
-
-        self._set_head(buffer._head)
+            raise IndexError("Cannot insert to index out of range.")
 
     def pop(self) -> T:
         """
