@@ -103,19 +103,18 @@ class LinkedList(Generic[T]):
         The time complexity has to be O(N), since the entire list needs to be iterated
         through to get to the last node.
         """
-        current_head = self._head
+        current = self._head
 
         # When the list is empty, adding to start has the same effect:
-        if current_head is None:
+        if current is None:
             return self.add_to_start(data)
 
-        while current_head.get_next():
-            current_head = current_head.get_next()
+        while current.get_next():
+            current = current.get_next()
 
         new_head = Node(data)
-        current_head.set_next(new_head)
 
-        self._head = current_head
+        current.set_next(new_head)
 
     def insert(self, index: int, data: T) -> None:
         """
