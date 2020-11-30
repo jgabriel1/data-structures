@@ -1,5 +1,6 @@
-from stack.errors import EmptyStackError, StackOverflowError
-from unittest import TestCase, defaultTestLoader, TextTestRunner
+from unittest import TestCase
+
+from stack.errors import StackOverflowError, StackUnderflowError
 from stack.main import Stack
 
 
@@ -70,11 +71,4 @@ class TestStack(TestCase):
 
         pop_item = lambda: stack.pop()
 
-        self.assertRaises(EmptyStackError, pop_item)
-
-
-if __name__ == "__main__":
-    suite = defaultTestLoader.loadTestsFromTestCase(TestStack)
-    runner = TextTestRunner()
-
-    runner.run(suite)
+        self.assertRaises(StackUnderflowError, pop_item)

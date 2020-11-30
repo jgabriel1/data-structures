@@ -1,4 +1,4 @@
-class EmptyStackError(BaseException):
+class StackUnderflowError(BaseException):
     ...
 
 

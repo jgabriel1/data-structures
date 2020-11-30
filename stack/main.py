@@ -1,6 +1,6 @@
 from typing import Generic, Iterable, List, Optional, TypeVar
 
-from stack.errors import EmptyStackError, NotIterableError, StackOverflowError
+from stack.errors import NotIterableError, StackOverflowError, StackUnderflowError
 
 T = TypeVar("T")
 
@@ -10,8 +10,8 @@ class Stack(Generic[T]):
     _stack: List[T]
     _size: Optional[int]
 
-    def __init__(self, iterable: Iterable[T] = [], size: Optional[int] = None) -> None:
-        self._stack = list(iterable)
+    def __init__(self, size: Optional[int] = None) -> None:
+        self._stack = []
         self._size = size
 
     def __len__(self) -> int:
@@ -44,7 +44,7 @@ class Stack(Generic[T]):
 
     def pop(self) -> Optional[T]:
         if self.is_empty:
-            raise EmptyStackError
+            raise StackUnderflowError
 
         return self._stack.pop()
 
@@ -53,3 +53,10 @@ class Stack(Generic[T]):
             return None
 
         return self._stack[-1]
+
+    @classmethod
+    def from_iterable(cls, iterable: Iterable[T]) -> "Stack[T]":
+        stack = cls()
+        stack._stack = list(iterable)
+
+        return stack
