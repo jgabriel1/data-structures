@@ -2,14 +2,11 @@ from typing import Any, Generic, Iterator, NewType, Optional, TypeVar
 
 T = TypeVar("T")
 
-NodeType = NewType(name="NodeType", tp=Any)
-LinkedListType = NewType(name="LinkedListType", tp=Any)
-
 
 class Node(Generic[T]):
 
     data: T
-    _next: Optional[NodeType]
+    _next: Optional["Node"]
 
     def __init__(self, data: T) -> None:
         self.data = data
@@ -18,10 +15,10 @@ class Node(Generic[T]):
     def __repr__(self) -> str:
         return f"Node({self.data}, {self._next})"
 
-    def set_next(self, node: NodeType):
+    def set_next(self, node: "Node" = None):
         self._next = node
 
-    def get_next(self) -> NodeType:
+    def get_next(self) -> Optional["Node"]:
         return self._next
 
 
@@ -88,9 +85,6 @@ class LinkedList(Generic[T]):
         else:
             self._head.set_next(node)
 
-    def _extend_list(self, _list: LinkedListType) -> None:
-        self._head.set_next(_list._node)
-
     def contains(self, data: T) -> bool:
         for item in self:
             if item == data:
@@ -109,79 +103,90 @@ class LinkedList(Generic[T]):
         The time complexity has to be O(N), since the entire list needs to be iterated
         through to get to the last node.
         """
-        current_head = self._head
+        current = self._head
 
         # When the list is empty, adding to start has the same effect:
-        if current_head is None:
+        if current is None:
             return self.add_to_start(data)
 
-        while current_head.get_next():
-            current_head = current_head.get_next()
+        while current.get_next():
+            current = current.get_next()
 
         new_head = Node(data)
-        current_head.set_next(new_head)
 
-        self._head = current_head
+        current.set_next(new_head)
 
     def insert(self, index: int, data: T) -> None:
         """
-        Insert an item in a specific position of the list.
-        TODO: Refactor so that it can be inserted at the beginning or at the end. As is
-        it breaks if used with those indexes.
+        Insert an item in a specific position of the list. Time complexity is O(index).
+        The algorithm has to iterate over the list all the way up to the point where the
+        new item will be added.
         """
 
-        buffer = LinkedList()
         current = self._head
 
-        for i, item in enumerate(self):
-            if i == index:
-                new_list = Node(data)
-                new_list.set_next(current)
+        if index == 0:
+            return self.add_to_start(data)
+
+        for i, _ in enumerate(self):
+            if i + 1 == index:
+                rest = current.get_next()
+
+                new_node = Node(data)
+                new_node.set_next(rest)
+
+                current.set_next(new_node)
+
                 break
 
-            buffer.add_to_end(item)
             current = current.get_next()
         else:
-            raise IndexError
-
-        buffer._extend_node(new_list)
-
-        self._set_head(buffer._head)
+            raise IndexError("Cannot insert to index out of range.")
 
     def pop(self) -> T:
         """
         Remove the last item of the list returning it.
         """
-        buffer = LinkedList()
-        head = self._head
+        current = self._head
 
-        for item in self:
-            next_node = head.get_next()
+        if current is None:
+            raise IndexError("Cannot pop from empty list")
 
-            if next_node is None:
-                self._set_head(buffer._head)
+        while True:
+            next_node = current.get_next()
+
+            if next_node.get_next() is None:
+                item = next_node.data
+
+                current.set_next(None)
+
                 return item
 
-            buffer.add_to_end(item)
-            head = head.get_next()
-        else:
-            raise IndexError
+            current = current.get_next()
 
     def remove(self, index: int) -> T:
         """
         Remove an item from the list at a specific index.
         """
-        buffer = LinkedList()
-        head = self._head
+        current = self._head
 
-        for i, item in enumerate(self):
-            if i == index:
-                buffer._extend_node(head.get_next())
-                self._set_head(buffer._head)
+        if current is None:
+            raise IndexError("Cannot remove from empty list.")
 
-                return item
+        if index == 0:
+            self._head = current.get_next()
 
-            buffer.add_to_end(item)
-            head = head.get_next()
+            return current.data
+
+        for i, _ in enumerate(self):
+            if i + 1 == index:
+                next_node = current.get_next()
+                rest = next_node.get_next()
+
+                current.set_next(rest)
+
+                return next_node.data
+
+            current = current.get_next()
         else:
             raise IndexError
