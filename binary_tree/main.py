@@ -1,32 +1,18 @@
-from abc import ABCMeta, abstractmethod
-from typing import Any, Generic, Optional, TypeVar
+from typing import Generic, Optional, TypeVar
 
+from binary_tree.types import Comparable
 
-class Comparable(metaclass=ABCMeta):
-    @abstractmethod
-    def __gt__(self, other: "Comparable") -> bool:
-        ...
-
-    @abstractmethod
-    def __lt__(self, other: "Comparable") -> bool:
-        ...
-
-    @abstractmethod
-    def __eq__(self, other: "Comparable") -> bool:
-        ...
-
-
-T = TypeVar("T", Comparable, Any)
+T = TypeVar("T", bound=Comparable)
 
 
 class Node(Generic[T]):
 
-    data: T
+    key: T
     _left: Optional["Node[T]"]
     _right: Optional["Node[T]"]
 
-    def __init__(self, data: T) -> None:
-        self.data = data
+    def __init__(self, key: T) -> None:
+        self.key = key
         self._left = None
         self._right = None
 
@@ -61,13 +47,13 @@ class BinaryTree(Generic[T]):
             return
 
         while True:
-            if value < current.data:
+            if value < current.key:
                 if current.get_left() is None:
                     current.set_left(Node(value))
                     break
                 else:
                     current = current.get_left()
-            elif value > current.data:
+            elif value > current.key:
                 if current.get_right() is None:
                     current.set_right(Node(value))
                     break
@@ -80,9 +66,9 @@ class BinaryTree(Generic[T]):
         current = self._root
 
         while current:
-            if value < current.data:
+            if value < current.key:
                 current = current.get_left()
-            elif value > current.data:
+            elif value > current.key:
                 current = current.get_right()
             else:
                 return True
