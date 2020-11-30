@@ -1,5 +1,6 @@
-from queue.errors import QueueOverflowError, QueueUnderflowError
 from typing import Generic, List, Optional, TypeVar
+
+from queue.errors import QueueOverflowError, QueueUnderflowError
 
 T = TypeVar("T")
 

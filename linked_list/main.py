@@ -1,4 +1,4 @@
-from typing import Any, Generic, Iterator, NewType, Optional, TypeVar
+from typing import Generic, Iterator, Optional, TypeVar
 
 T = TypeVar("T")
 

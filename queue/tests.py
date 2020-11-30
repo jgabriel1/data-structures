@@ -1,6 +1,7 @@
+from unittest import TestCase
+
 from queue.errors import QueueOverflowError, QueueUnderflowError
 from queue.main import Queue
-from unittest import TestCase
 
 
 class TestQueue(TestCase):
