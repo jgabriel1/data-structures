@@ -168,17 +168,25 @@ class LinkedList(Generic[T]):
         """
         Remove an item from the list at a specific index.
         """
-        buffer = LinkedList()
-        head = self._head
+        current = self._head
 
-        for i, item in enumerate(self):
-            if i == index:
-                buffer._extend_node(head.get_next())
-                self._set_head(buffer._head)
+        if current is None:
+            raise IndexError("Cannot remove from empty list.")
 
-                return item
+        if index == 0:
+            self._head = current.get_next()
 
-            buffer.add_to_end(item)
-            head = head.get_next()
+            return current.data
+
+        for i, _ in enumerate(self):
+            if i + 1 == index:
+                next_node = current.get_next()
+                rest = next_node.get_next()
+
+                current.set_next(rest)
+
+                return next_node.data
+
+            current = current.get_next()
         else:
             raise IndexError
